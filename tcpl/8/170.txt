@@ -1,4 +1,4 @@
-have you permission to access it?), and if all is well, returns to the program a small non-negative integer called a file descriptor. 
+you have permission to access it?), and if all is well, returns to the program a small non-negative integer called a file descriptor. 
 Whenever input or output is to be done on the file, the file descriptor is used instead of the name to identify the file. 
 (A file descriptor is analogous to the file pointer used by the standard library, or to the file handle of MS-DOS.) 
 All information about an open file is maintained by the system; the user program refers to the file only by its file descriptor.
