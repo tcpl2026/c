@@ -1,0 +1,46 @@
+will be made.
+
+Putting these facts together, we can write a simple program to copy its input to its output, 
+the equivalent of the file copying program written for Chapter 1. 
+This program will copy anything to anything, since the input and output can be redirected to any file or device.
+
+#include "syscalls.h"
+
+main()    /* copy input to output */
+{
+    char buf[BUFSIZ];
+    int n;
+
+    while ((n = read(0, buf, BUFSIZ)) > 0)
+        write(1, buf, n);
+    return 0;
+}
+
+We have collected function prototypes for the system calls into a file called syscalls.h 
+so we can include it in the programs of this chapter. 
+This name is not standard, however.
+
+The parameter BUFSIZ is also defined in syscalls.h; 
+its value is a good size for the local system. 
+If the file size is not a multiple of BUFSIZ, some read will return a smaller number of bytes to be written by write; 
+the next call to read after that will return zero.
+
+It is instructive to see how read and write can be used to construct higher-level routines like getchar, putchar, etc.
+For example, here is a version of getchar that does unbuffered input,
+by reading the standard input one character at a time.
+
+#include "syscalls.h"
+
+/* getchar: unbuffered single character input */
+
+int getchar(void)
+{
+    char c;
+
+    return (read(0, &c, 1) == 1) ? (unsigned char) c : EOF;
+}
+
+c must be a char, because read needs a character pointer.
+Casting c to unsigned char in the return statement eliminates any problem of sign extension.
+
+The second version of getchar does input in big chunks, and hands out the characters one at a time. 
