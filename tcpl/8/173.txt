@@ -1,0 +1,46 @@
+The perms argument is always zero for the uses of open that we will discuss.
+
+It is an error to try to open a file that does not exist. 
+The system call creat is provided to create new files, or to re-write old ones.
+
+int creat(char *name, int perms);
+
+fd = creat(name, perms);
+
+returns a file descriptor if it was able to create the file, and -1 if not.
+If the file already exists, creat will truncate it to zero length, thereby discarding its previous contents;
+it is not an error to creat a file that already exists.
+
+If the file does not already exist, creat creates it with the permissions specified by the perms argument.
+In the UNIX file system, there are nine bits of permission information associated
+with a file that control read, write and execute access for the owner of the file, for the owner's group, and for all others.
+Thus a three-digit octal number is convenient for specifying the permissions.
+For example, 0775 specifies read, write and execute permission for the owner, and read and execute permission for the group and everyone else.
+
+To illustrate, here is a simplified version of the UNIX program cp, which copies one file to another.
+Our version copies only one file, it does not permit the second argument to be a directory, and it invents permissions instead of copying them.
+
+#include <stdio.h>
+#include <fcntl.h>
+#include "syscalls.h"
+#define PERMS 0666 /* RW for owner, group, others */
+void error(char *, ...);
+/* cp: copy f1 to f2 */
+main(int argc, char *argv[])
+{
+int f1, f2, n;
+char buf[BUFSIZ];
+if (argc != 3)
+error("Usage: cp from to");
+if ((f1 = open(argv[1], O_RDONLY, 0)) == -1)
+error("cp: can't open %s", argv[1]);
+if ((f2 = creat(argv[2], PERMS)) == -1)
+error("cp: can't create %s, mode %03o",
+argv[2], PERMS);
+while ((n = read(f1, buf, BUFSIZ)) > 0)
+if (write(f2, buf, n) != n)
+error("cp: write error on file %s", argv[2]);
+return 0;
+} 
+
+This program creates the output file with fixed permissions of 0666. With the
