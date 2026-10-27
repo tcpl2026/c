@@ -22,7 +22,7 @@ void error(char *fmt, ...)
     exit(1);
 }
 
-There is a limit (often about 20) on the number of files that a program may open simultaneously.
+There is a limit (often about 20) on the number of files that a program may have open simultaneously.
 Accordingly, any program that intends to process many files must be
 prepared to re-use file descriptors. The function close(int fd) breaks the connection
 between a file descriptor and an open file, and frees the file descriptor for use with some other
