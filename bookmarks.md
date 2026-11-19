@@ -30,3 +30,5 @@ https://c.biancheng.net/algorithm_tutorial/
 
 grep, ed edito的早期版本源代码
 
+rsa-library
+tinyhttpd
